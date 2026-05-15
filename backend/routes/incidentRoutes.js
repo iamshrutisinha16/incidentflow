@@ -8,7 +8,7 @@ const {
 } = require("../controllers/incidentController");
 
 router.get("/", getIncidents);
-
+router.post("/", protect, createIncident);
 router.post("/", createIncident);
 
 module.exports = router;
