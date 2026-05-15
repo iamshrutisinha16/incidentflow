@@ -1,5 +1,4 @@
 const express = require("express");
-
 const router = express.Router();
 
 const {
@@ -7,8 +6,9 @@ const {
   createIncident,
 } = require("../controllers/incidentController");
 
-router.get("/", getIncidents);
+const protect = require("../middleware/authMiddleware"); 
+
+router.get("/", protect, getIncidents);
 router.post("/", protect, createIncident);
-router.post("/", createIncident);
 
 module.exports = router;
