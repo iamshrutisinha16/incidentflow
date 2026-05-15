@@ -18,14 +18,15 @@ function Dashboard() {
 
       const response = await API.get("/incidents");
 
-      const incidentsData =
-        response.data.incidents || response.data || [];
+      console.log("Incidents Response:", response.data);
 
-      setIncidents(
-        Array.isArray(incidentsData)
-          ? incidentsData
-          : []
-      );
+      // Handles both array and object response
+
+      const data = Array.isArray(response.data)
+        ? response.data
+        : response.data.incidents || [];
+
+      setIncidents(data);
 
     } catch (error) {
 
@@ -45,6 +46,8 @@ function Dashboard() {
     fetchIncidents();
 
   }, []);
+
+  // Safe filter
 
   const filteredIncidents = Array.isArray(incidents)
     ? incidents.filter((incident) =>
@@ -69,7 +72,7 @@ function Dashboard() {
           </h2>
 
           <p className="text-muted mb-0">
-            Manage incidents across your organization
+            Manage incidents across organization
           </p>
 
         </div>
@@ -87,15 +90,21 @@ function Dashboard() {
 
       <div className="row g-4 mb-4">
 
+        {/* Total */}
+
         <div className="col-md-4">
 
-          <div className="card border-0 shadow-sm rounded-4 h-100">
+          <div
+            className="card border-0 shadow rounded-4 text-white h-100"
+            style={{
+              background:
+                "linear-gradient(135deg,#667eea,#764ba2)",
+            }}
+          >
 
             <div className="card-body">
 
-              <h6 className="text-muted">
-                Total Incidents
-              </h6>
+              <h6>Total Incidents</h6>
 
               <h2 className="fw-bold">
                 {incidents.length}
@@ -107,17 +116,23 @@ function Dashboard() {
 
         </div>
 
+        {/* Open */}
+
         <div className="col-md-4">
 
-          <div className="card border-0 shadow-sm rounded-4 h-100">
+          <div
+            className="card border-0 shadow rounded-4 text-white h-100"
+            style={{
+              background:
+                "linear-gradient(135deg,#f7971e,#ffd200)",
+            }}
+          >
 
             <div className="card-body">
 
-              <h6 className="text-muted">
-                Open Incidents
-              </h6>
+              <h6>Open Incidents</h6>
 
-              <h2 className="fw-bold text-warning">
+              <h2 className="fw-bold">
 
                 {
                   incidents.filter(
@@ -133,17 +148,23 @@ function Dashboard() {
 
         </div>
 
+        {/* Resolved */}
+
         <div className="col-md-4">
 
-          <div className="card border-0 shadow-sm rounded-4 h-100">
+          <div
+            className="card border-0 shadow rounded-4 text-white h-100"
+            style={{
+              background:
+                "linear-gradient(135deg,#11998e,#38ef7d)",
+            }}
+          >
 
             <div className="card-body">
 
-              <h6 className="text-muted">
-                Resolved Incidents
-              </h6>
+              <h6>Resolved Incidents</h6>
 
-              <h2 className="fw-bold text-success">
+              <h2 className="fw-bold">
 
                 {
                   incidents.filter(
@@ -186,6 +207,8 @@ function Dashboard() {
 
           </div>
 
+          {/* Loading */}
+
           {loading ? (
 
             <div className="text-center py-5">
@@ -203,6 +226,8 @@ function Dashboard() {
 
           ) : filteredIncidents.length === 0 ? (
 
+            /* Empty State */
+
             <div className="text-center py-5">
 
               <h5 className="text-muted">
@@ -213,9 +238,11 @@ function Dashboard() {
 
           ) : (
 
+            /* Table */
+
             <div className="table-responsive">
 
-              <table className="table align-middle table-hover">
+              <table className="table table-hover align-middle">
 
                 <thead className="table-light">
 
@@ -242,9 +269,7 @@ function Dashboard() {
                     <tr key={incident._id}>
 
                       <td className="fw-semibold">
-
                         {incident.title}
-
                       </td>
 
                       <td>
