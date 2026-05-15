@@ -33,10 +33,7 @@ function CreateIncident() {
 
       setLoading(true);
 
-      await API.post(
-        "/incidents",
-        formData
-      );
+     await API.post("/incidents", formData);
 
       navigate("/dashboard");
 
